@@ -1,1 +1,11 @@
-.git
+
+.git/
+steamworks_sdk
+output/
+
+rain_world_uploader.out
+tags
+
+test.sh
+mod/
+thumbnail.png
