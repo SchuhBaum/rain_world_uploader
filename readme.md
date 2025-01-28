@@ -41,9 +41,7 @@ You get the MOD\_ID from creating a mod, or from a Workshop URL ([...]?id=MOD\_I
 The SteamAPI requires the file `steam_appid.txt`.
 This file is provided along with the executable.
 This tool reads the APP\_ID from there as well.
-Technically, you can try to upload a mod for any game by changing the APP\_ID in that file.
-
-This tool just uploads files. If Steam returns an error then If anything is wrong then Steam will complain about it.
+Technically, you upload a mod for any game that supports it by changing the APP\_ID in that file.
 
 ### Building from source
 You need to download the Steamwork SDK from [Download](https://partner.steamgames.com/downloads/list).
