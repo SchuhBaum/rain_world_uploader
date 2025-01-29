@@ -1,11 +1,14 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+namespace fs = std::filesystem;
 
-#include "main.h"
+#include <chrono>
+#include <thread>
+
 #include "steam_api.h"
 
-namespace fs = std::filesystem;
+#include "main.h"
 
 //
 //
@@ -62,7 +65,7 @@ void Callback_Handler::on_workshop_item_updated(SubmitItemUpdateResult_t *pCallb
 //
 
 bool create_mod(const AppId_t app_id, char *dir_path) {
-    // Check the path first. We "update" the mod after it is created and upload
+    // Check the path first. We update the mod after it is created and upload
     // the mod directory.
     if (!fs::is_directory(dir_path)) {
         fprintf(stderr, "[Rain_World_Uploader]: [ERROR] Did not find the mod directory at \"%s\".\n", dir_path);
@@ -247,7 +250,10 @@ int main(int argc, char **argv) {
         }
     }
 
-    while (!is_done) SteamAPI_RunCallbacks();
+    while (!is_done) {
+        SteamAPI_RunCallbacks();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
 
     SteamAPI_Shutdown();
     return 0;

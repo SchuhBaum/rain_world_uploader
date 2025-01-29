@@ -11,7 +11,7 @@ cur_wd_relative="$(dirname "${BASH_SOURCE[0]}")"
 cur_wd="$(cd $cur_wd_relative && pwd)"
 
 input="$cur_wd/main.cpp"
-output="-o $cur_wd/output/rain_world_uploader.out"
+output="-o $cur_wd/rain_world_uploader/rain_world_uploader.out"
 
 # You need to download the Steamworks Sdk yourself.
 common_args="-std=c++17 -I$cur_wd/steamworks_sdk/public/steam -L$cur_wd/lib -Wl,-rpath=\$ORIGIN"

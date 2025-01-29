@@ -1,32 +1,31 @@
 ## Rain World Uploader for Linux
-#### Version: 0.1.0
+#### Version: 0.1.1
 
 This is a simple command line tool to upload Rain World mods to Steam.
 If you are on Windows then you can use [RainWorldWorkshopUploader](https://github.com/MatheusVigaro/RainWorldWorkshopUploader) instead.
 
-***
-
+### Usage
+#### Create a mod:
 ```bash
-[USAGE]: Create a mod:
-    $ rain_world_uploader.out /path/to/mod/directory
-    NOTE: This returns the number MOD_ID for the created mod.
+rain_world_uploader.out /path/to/mod/directory
 ```
+This returns the MOD\_ID for the created mod.
 
+#### Update a mod:
 ```bash
-[USAGE]: Update a mod:
-    $ rain_world_uploader.out MOD_ID /path/to/mod/directory
-    NOTE: You get the number MOD_ID from creating a mod, or from a Workshop URL ([...]?id=MOD_ID).
+rain_world_uploader.out MOD_ID /path/to/mod/directory
 ```
+You get the MOD\_ID from creating a mod, or from a Workshop URL ([...]?id=MOD\_ID).
 
+#### Set thumbnail:
 ```bash
-[USAGE]: Set thumbnail:
-    $ rain_world_uploader.out MOD_ID -thumbnail /path/to/thumbnail.png
+rain_world_uploader.out MOD_ID -thumbnail /path/to/thumbnail.png
 ```
-
+#### Set tags:
 ```bash        
-[USAGE]: Set tags (this overrides existing tags):
-    $ rain_world_uploader.out MOD_ID -tags "Tag 1" "Tag 2" ...
+rain_world_uploader.out MOD_ID -tags "Tag 1" "Tag 2" ...
 ```
+This overrides existing tags.
 
 ### Context
 
@@ -46,14 +45,23 @@ Technically, you upload a mod for any game that supports it by changing the APP\
 ### Building from source
 You need to download the Steamwork SDK from [Download](https://partner.steamgames.com/downloads/list).
 Move the files to the directory `./steamworks_sdk/`.
+Create the directory if it does not exist.
 Make sure that the path `./steamworks_sdk/public/steam` exists.
 
 Run the script `./build.sh`.
 
-You might get an error that the file `steamclient.so` is missing. Check the subfolders in `$HOME/.steam/sdk64/` or just search for it.
+You might get an error that the file `steamclient.so` is missing.
+Check the subfolders in `$HOME/.steam/sdk64/` or just search for it.
 
 ### Contact
 If you have feedback, you can message me on Discord `@schuhbaum` or write an email to SchuhBaum71@gmail.com.
 
 ### License
 See the file LICENSE-MIT.
+
+### Changelog
+v0.1.1:
+- Fixed a bug where the CPU would run at 100% while waiting.
+
+v0.1.0:
+- Initial release.

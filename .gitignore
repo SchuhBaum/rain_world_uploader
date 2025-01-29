@@ -1,11 +1,12 @@
 
 .git/
-steamworks_sdk
+steamworks_sdk/
 rain_world_uploader/
 
-rain_world_uploader.out
 tags
 
 test.sh
 mod/
 thumbnail.png
+
+install.sh
