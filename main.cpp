@@ -21,10 +21,16 @@ bool is_done = false;
 // class Callback_Handler
 //
 
-void Callback_Handler::on_workshop_item_created(CreateItemResult_t *pCallback, bool bIOFailure) {
+void Callback_Handler::cleanup() {
+    is_done = true;
+    this->app_id   = NULL;
+    this->dir_path = NULL;
+}
+
+void Callback_Handler::on_mod_created(CreateItemResult_t *pCallback, bool bIOFailure) {
     if (bIOFailure) {
         fprintf(stderr, "[Rain_World_Uploader]: [ERROR] Creating the mod failed due to an IO error!\n");
-        is_done = true;
+        this->cleanup();
         return;
     }
 
@@ -36,18 +42,18 @@ void Callback_Handler::on_workshop_item_created(CreateItemResult_t *pCallback, b
 
     if (this->app_id != NULL && this->dir_path != NULL) {
         PublishedFileId_t mod_id = pCallback->m_nPublishedFileId;
-        if (update_mod(app_id, mod_id, this->dir_path)) {
+        if (update_mod(this->app_id, mod_id, this->dir_path)) {
             is_done = false;
             return;
         }
     }
-    is_done = true;
+    this->cleanup();
 }
 
-void Callback_Handler::on_workshop_item_updated(SubmitItemUpdateResult_t *pCallback, bool bIOFailure) {
+void Callback_Handler::on_mod_updated(SubmitItemUpdateResult_t *pCallback, bool bIOFailure) {
     if (bIOFailure) {
         fprintf(stderr, "[Rain_World_Uploader]: [ERROR] Updating the mod failed due to an IO error!\n");
-        is_done = true;
+        this->cleanup();
         return;
     }
 
@@ -57,7 +63,7 @@ void Callback_Handler::on_workshop_item_updated(SubmitItemUpdateResult_t *pCallb
         fprintf(stderr, "[Rain_World_Uploader]: [ERROR] Failed to update the mod. Error: %d\n", pCallback->m_eResult);
     }
 
-    is_done = true;
+    this->cleanup();
 }
 
 //
@@ -81,7 +87,7 @@ bool create_mod(const AppId_t app_id, char *dir_path) {
     // Static means that it is global but only initialized once.
     SteamAPICall_t callback_handle = SteamUGC()->CreateItem(app_id, k_EWorkshopFileTypeCommunity);
     static CCallResult<Callback_Handler, CreateItemResult_t> call_result;
-    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_workshop_item_created);
+    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_mod_created);
 
     printf("[Rain_World_Uploader]: Waiting for results...\n");
     return true;
@@ -104,7 +110,7 @@ bool update_mod(const AppId_t app_id, PublishedFileId_t mod_id, char *dir_path) 
     // Workshop item] > Change Notes > Edit).
     SteamAPICall_t callback_handle = SteamUGC()->SubmitItemUpdate(update_handle, "");
     static CCallResult<Callback_Handler, SubmitItemUpdateResult_t> call_result;
-    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_workshop_item_updated);
+    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_mod_updated);
 
     printf("[Rain_World_Uploader]: Waiting for results...\n");
     return true;
@@ -125,7 +131,7 @@ bool set_thumbnail(const AppId_t app_id, const PublishedFileId_t mod_id, char *f
 
     SteamAPICall_t callback_handle = SteamUGC()->SubmitItemUpdate(update_handle, "");
     static CCallResult<Callback_Handler, SubmitItemUpdateResult_t> call_result;
-    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_workshop_item_updated);
+    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_mod_updated);
 
     printf("[Rain_World_Uploader]: Waiting for results...\n");
     return true;
@@ -148,7 +154,7 @@ bool set_tags(const AppId_t app_id, const PublishedFileId_t mod_id, const int ta
 
     SteamAPICall_t callback_handle = SteamUGC()->SubmitItemUpdate(update_handle, "");
     static CCallResult<Callback_Handler, SubmitItemUpdateResult_t> call_result;
-    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_workshop_item_updated);
+    call_result.Set(callback_handle, &callback_handler, &Callback_Handler::on_mod_updated);
 
     printf("[Rain_World_Uploader]: Waiting for results...\n");
     return true;
